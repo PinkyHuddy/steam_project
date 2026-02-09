@@ -1,9 +1,12 @@
 name: Steam CCU Collector
 
+permissions:
+  contents: write
+
 on:
   schedule:
-    - cron: "*/30 * * * *"   # every 30 minutes (UTC)
-  workflow_dispatch:         # allow manual runs
+    - cron: "*/30 * * * *"
+  workflow_dispatch:
 
 jobs:
   collect:
@@ -34,3 +37,4 @@ jobs:
           git add data/steam_ccu_log.csv
           git commit -m "Update Steam CCU log (scheduled)" || echo "No changes to commit"
           git push
+
