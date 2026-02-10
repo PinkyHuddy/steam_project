@@ -1,4 +1,4 @@
-name: Steam CCU Collector
+name: Steam CCU Collector (15m cron + dedupe)
 
 permissions:
   contents: write
@@ -7,6 +7,10 @@ on:
   schedule:
     - cron: "*/15 * * * *"
   workflow_dispatch:
+
+concurrency:
+  group: steam-ccu-collector
+  cancel-in-progress: true
 
 jobs:
   collect:
@@ -35,6 +39,8 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add data/steam_ccu_log.csv
+          git commit -m "Update Steam CCU log" || echo "No changes to commit"
+          git push
           git commit -m "Update Steam CCU log (scheduled)" || echo "No changes to commit"
           git push
 
